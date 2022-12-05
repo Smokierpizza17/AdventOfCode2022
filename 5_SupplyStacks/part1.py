@@ -1,6 +1,6 @@
 import re
 
-with open("/home/oskar/Documents/AoC2022/day5/input.txt", "r") as inputFile:
+with open("C:\\Users\\oskar\\Drive\\projects\\AdventOfCode2022\\5_SupplyStacks\\input.txt", "r") as inputFile:
     taskInput = inputFile.read().split("\n")
 
 crateStacks = {}

@@ -1,9 +1,28 @@
 import re
+import sys
 
-with open("/home/oskar/Documents/AoC2022/day5/input.txt", "r") as inputFile:
+with open("C:\\Users\\oskar\\Drive\\projects\\AdventOfCode2022\\5_SupplyStacks\\input.txt", "r") as inputFile:
     taskInput = inputFile.read().split("\n")
 
 crateStacks = {}
+
+def stacksVisualiser():  
+    tallestStack = 0
+    for stack in crateStacks.values():
+        if tallestStack < len(stack.crates):
+            tallestStack = len(stack.crates)
+    outputLines = []
+    for i in range(tallestStack):
+        currLine = ""
+        for stack in crateStacks.values():
+            if i < len(stack.crates):
+                currLine += stack.crates[i] + " "
+            else:
+                currLine += "  "
+        outputLines.append(currLine)
+    outputLines.reverse()
+    outputLines.append("1 2 3 4 5 6 7 8 9")
+    print("\n".join(outputLines))
 
 class CrateStack():
     def __init__(self, name):
@@ -15,7 +34,7 @@ class CrateStack():
     def moveMultipleCrates(self, targetStack, count):
         for crate in self.crates[int(count) * -1:]:
             targetStack.takeCrate(crate)
-            self.crates.remove(crate)
+            self.crates.pop(-1)
     def takeCrate(self, crateStr):
         self.crates.append(crateStr)
 
@@ -41,7 +60,5 @@ for line in taskInput[lastLineOfStacks + 3:]:
 
 topCrates = []
 for stack in crateStacks.values():
-    print(stack.crates)
     topCrates.append(stack.crates[-1])
-print("")
-print("".join(topCrates))
+print("".join(topCrates)) 
