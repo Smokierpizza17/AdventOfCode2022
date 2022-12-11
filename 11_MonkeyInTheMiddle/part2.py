@@ -1,18 +1,15 @@
 from collections import OrderedDict
-import re, tqdm
+import re, tqdm, primefac
 import math as maths
 
-ROUNDCOUNT = 20
+ROUNDCOUNT = 10000
 
-with open(r"C:\Users\oskar\Drive\projects\AdventOfCode2022\11_MonkeyInTheMiddle\testInput.txt", "r") as inputFile:
+with open(r"C:\Users\oskar\Drive\projects\AdventOfCode2022\11_MonkeyInTheMiddle\input.txt", "r") as inputFile:
     taskInput = inputFile.read().split("\n\n")
 
 def evaluateFunction(funcString, var, sub):
     '''returns result from function funcString with variable var, if var is substituted with sub'''
     return eval(funcString.replace(var, str(sub)))
-
-def reliefFromItem(worryLevel):
-    return maths.floor(worryLevel / 3)
 
 def printState(monkeys):
     for monkey in monkeys.values():
@@ -27,6 +24,7 @@ def getMonkeyBusiness(monkeys):
     return twoMostActiveCounts[0] * twoMostActiveCounts[1]
 
 
+lcm = 1
 monkeys = {}
 class Monkey():
     def __init__(self, name):
@@ -43,9 +41,8 @@ class Monkey():
     def performTurn(self):
         for workingWorryLevel in self.worryLevels:
             workingWorryLevel = evaluateFunction(self.operation, "old", workingWorryLevel)
-            #workingWorryLevel = reliefFromItem(workingWorryLevel)
+            workingWorryLevel %= lcm
             self.inspectionCount += 1
-            workingWorryLevel = workingWorryLevel % self.moduloTest
             if workingWorryLevel % self.moduloTest == 0:  # throw to ifTrueMonkey
                 self.ifTrueMonkey.takeWorryLevel(workingWorryLevel)
             else:
@@ -74,6 +71,7 @@ for monkeyString in taskInput:
     workingMonkey.worryLevels = startingWorryLevels
     workingMonkey.operation = operation
     workingMonkey.moduloTest = int(moduloTest)
+    lcm *= workingMonkey.moduloTest
 
     if ifTrueMonkey in monkeys.keys():
         workingMonkey.ifTrueMonkey = monkeys[ifTrueMonkey]
